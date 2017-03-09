@@ -4,8 +4,8 @@
 #' the site if necessary, and refresh the page automatically.
 #' @param ... Arguments passed to \code{servr::httw()}.
 #' @export
-serve_site = function(...) {
-  build_site(TRUE)
+serve_site = function(method = "html", ...) {
+  build_site(TRUE, method = method)
   pdir = publish_dir(); n = nchar(pdir)
   servr::httw(site.dir = pdir, handler = function(...) {
     files = c(...)
@@ -13,7 +13,7 @@ serve_site = function(...) {
     files = files[substr(files, 1, n) != pdir]
     # re-generate only if Rmd/md or config files or layouts were updated
     if (length(grep('^(themes|layouts|static)/|[.](R?md|toml|yaml)$', files)))
-      build_site(TRUE)
+      build_site(TRUE, method = method)
   }, ...)
 }
 
